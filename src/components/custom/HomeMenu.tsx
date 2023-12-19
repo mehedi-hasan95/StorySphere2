@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 // ScrollingMenu.tsx
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 const HomeMenu: React.FC = () => {
+  const { data: session } = useSession();
   const [scrolling, setScrolling] = useState(false);
 
   useEffect(() => {
@@ -45,7 +47,12 @@ const HomeMenu: React.FC = () => {
           <Link href="#">Our Story</Link>
           <Link href="#">Membership</Link>
           <Link href="#">Write</Link>
-          <Link href="#">Sign In</Link>
+          {session?.user.id ? (
+            <Button onClick={() => signOut()}>LogOut</Button>
+          ) : (
+            <Link href="/signin">Sign In</Link>
+          )}
+
           <Button>Get Started</Button>
         </div>
       </div>
