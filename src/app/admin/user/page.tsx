@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -7,26 +8,47 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Image from "next/image";
+import useSWR from "swr";
 
-const AllUser = async () => {
+interface userDataProps {
+  id: string;
+  image: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+const AllUser = () => {
+  const { data, isLoading } = useSWR("/api/admin/alluser");
+  if (isLoading) return <div>loading...</div>;
   return (
     <Table>
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="w-[100px]">Image</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead className="text-right">Account Open Date</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">INV001</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell>Credit Card</TableCell>
-          <TableCell className="text-right">$250.00</TableCell>
-        </TableRow>
+        {data?.user?.map((item: userDataProps) => (
+          <TableRow key={item.id}>
+            <TableCell>
+              <Image
+                src={item?.image}
+                alt=""
+                height={500}
+                width={500}
+                className="h-10 w-10 rounded-full"
+              />
+            </TableCell>
+            <TableCell>{item.name}</TableCell>
+            <TableCell>{item.email}</TableCell>
+            <TableCell>{item.createdAt}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );

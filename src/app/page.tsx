@@ -3,7 +3,7 @@ import BlogPosts from "@/components/home/BlogPosts";
 import Hero from "@/components/home/Hero";
 import Trending from "@/components/home/Trending";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div>
       <HomeMenu />

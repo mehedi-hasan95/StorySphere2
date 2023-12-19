@@ -11,7 +11,6 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 const UserSettings = () => {
   const { data: session } = useSession();
-  console.log(session?.user.image);
   return (
     <>
       {session?.user.id ? (

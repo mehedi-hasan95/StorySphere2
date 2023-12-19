@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const currentUser = await getCurrentUser();
-    if (currentUser?.role !== "admin") {
+    const currentUsre = await getCurrentUser();
+    if (currentUsre?.role !== "admin") {
       return NextResponse.json({ msg: "unauthorize user", status: 401 });
     }
     const user = await prismadb.user.findMany({
@@ -20,3 +20,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ msg: "faill", error });
   }
 }
+
+// export async function GET(req: NextRequest) {
+//   try {
+//     const user = await prismadb.user.findMany();
+//     return NextResponse.json({ msg: "success", user });
+//   } catch (error) {
+//     return NextResponse.json({ msg: "faill", error });
+//   }
+// }
