@@ -49,6 +49,8 @@ model User {
   role           roleEnam  @default(user)
   accounts       Account[]
   sessions       Session[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
 
 model VerificationToken {
