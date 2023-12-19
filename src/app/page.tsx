@@ -9,9 +9,7 @@ export default function Home() {
     <div>
       <HomeMenu />
       <Hero />
-      <div className="max-w-6xl p-4 mx-auto">
-        <Trending />
-      </div>
+      <Trending />
     </div>
   );
 }
