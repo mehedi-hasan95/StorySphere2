@@ -46,7 +46,7 @@ const AllUser = () => {
             </TableCell>
             <TableCell>{item.name}</TableCell>
             <TableCell>{item.email}</TableCell>
-            <TableCell>{item.createdAt}</TableCell>
+            <TableCell>{item.createdAt.slice(0, 10)}</TableCell>
           </TableRow>
         ))}
       </TableBody>

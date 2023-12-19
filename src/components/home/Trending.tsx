@@ -30,7 +30,7 @@ const Trending = () => {
                     width={500}
                     className="w-6 h-6 rounded-full"
                   />
-                  <HoverCard>
+                  <HoverCard openDelay={100}>
                     <HoverCardTrigger className="cursor-pointer">
                       Hover
                     </HoverCardTrigger>

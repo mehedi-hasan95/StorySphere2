@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/hover-card";
 import { Badge } from "@/components/ui/badge";
 import { Bookmark } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Blog = () => {
   return (
@@ -19,8 +20,10 @@ const Blog = () => {
             width={500}
             className="w-7 h-7 rounded-md"
           />
-          <HoverCard>
-            <HoverCardTrigger>Author Name</HoverCardTrigger>
+          <HoverCard openDelay={100}>
+            <HoverCardTrigger className={cn("cursor-pointer")}>
+              Author Name
+            </HoverCardTrigger>
             <HoverCardContent>
               The React Framework – created and maintained by @vercel.
             </HoverCardContent>
