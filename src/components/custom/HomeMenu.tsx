@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+
 // ScrollingMenu.tsx
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import UserSettings from "./UserSettings";
+import Logo from "./Logo";
 
 const HomeMenu: React.FC = () => {
-  const { data: session } = useSession();
   const [scrolling, setScrolling] = useState(false);
 
   useEffect(() => {
@@ -36,24 +36,13 @@ const HomeMenu: React.FC = () => {
         scrolling ? "scrolled bg-yourNewColor" : "bg-transparent"
       } fixed top-0 w-full z-50`}
     >
-      <div className="flex justify-between max-w-6xl px-4 mx-auto items-center">
-        <Link
-          href="/"
-          className="text-lg md:text-xl lg:text-2xl font-bold py-4 md:py-7"
-        >
-          StorySphere
-        </Link>
+      <div className="flex justify-between max-w-6xl px-4 mx-auto items-center py-3">
+        <Logo />
         <div className="flex gap-5 items-center">
           <Link href="#">Our Story</Link>
           <Link href="#">Membership</Link>
           <Link href="#">Write</Link>
-          {session?.user.id ? (
-            <Button onClick={() => signOut()}>LogOut</Button>
-          ) : (
-            <Link href="/signin">Sign In</Link>
-          )}
-
-          <Button>Get Started</Button>
+          <UserSettings />
         </div>
       </div>
       <Separator className={cn("bg-black")} />

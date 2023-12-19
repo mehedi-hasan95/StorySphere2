@@ -21,6 +21,7 @@ import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import ImageUpload from "@/components/custom/ImageUpload";
+import toast from "react-hot-toast";
 // FormSchema
 const formSchema = z
   .object({
@@ -63,6 +64,7 @@ const Register = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setLoading(true);
       const response = await fetch("/api/user/register", {
         method: "POST", // or 'PUT'
         headers: {
@@ -72,9 +74,18 @@ const Register = () => {
       });
 
       const result = await response.json();
-      console.log("Success:", result);
+
+      if (result.msg === "success") {
+        toast.success("User create successfully");
+        router.push("/signin");
+      }
+      if (result.msg === "fail") {
+        toast.error("Email already exist");
+      }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
