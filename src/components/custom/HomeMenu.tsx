@@ -32,7 +32,7 @@ const HomeMenu: React.FC = () => {
     <div
       className={`menu ${
         scrolling ? "scrolled bg-yourNewColor" : "bg-transparent"
-      }`}
+      } fixed top-0 w-full z-50`}
     >
       <div className="flex justify-between max-w-6xl px-4 mx-auto items-center">
         <Link
