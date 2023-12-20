@@ -40,17 +40,21 @@ enum roleEnam {
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String        @id @default(cuid())
   name           String?
-  email          String?   @unique
+  email          String?       @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  role           roleEnam  @default(user)
+  role           roleEnam      @default(user)
   accounts       Account[]
   sessions       Session[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  wishlist       Wishlist[]
+  postLike       PostLike[]
+  postComment    PostComment[]
+  posts          Posts[]
 }
 
 model VerificationToken {
@@ -60,4 +64,58 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Posts {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  short_Desc  String        @db.MediumText
+  views       Int           @default(0)
+  content     String        @db.LongText
+  image       String
+  verifide    Boolean       @default(false)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  wishlist    Wishlist[]
+  postLike    PostLike[]
+  postComment PostComment[]
+}
+
+model Wishlist {
+  id        String @id @default(cuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  post      Posts  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([productId])
+}
+
+model PostLike {
+  id        String @id @default(cuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  post      Posts  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([productId])
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  comment   String   @db.MediumText
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  post      Posts    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([productId])
 }

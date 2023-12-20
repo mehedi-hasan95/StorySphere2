@@ -8,8 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import UserSettings from "./UserSettings";
 import Logo from "./Logo";
+import { useSession } from "next-auth/react";
 
 const HomeMenu: React.FC = () => {
+  const { data } = useSession();
   const [scrolling, setScrolling] = useState(false);
 
   useEffect(() => {
@@ -41,7 +43,11 @@ const HomeMenu: React.FC = () => {
         <div className="flex gap-5 items-center">
           <Link href="#">Our Story</Link>
           <Link href="#">Membership</Link>
-          <Link href="#">Write</Link>
+          {data?.user.id ? (
+            <Link href="/write">Write</Link>
+          ) : (
+            <Link href="/signin">Write</Link>
+          )}
           <UserSettings />
         </div>
       </div>
