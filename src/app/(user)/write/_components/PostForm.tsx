@@ -8,21 +8,33 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { Input } from "@/components/ui/input";
 import { Editor } from "@/components/custom/Editor";
 import ImageUpload from "@/components/custom/ImageUpload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Posts } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { Delete } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -47,12 +59,16 @@ interface PostFormProps {
   initialData: Posts | null;
 }
 const PostForm: React.FC<PostFormProps> = ({ initialData }) => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const router = useRouter();
   const params = useParams();
-  const title = initialData ? "Update Category" : "Create Category";
+  const title = initialData ? "Update Post" : "Create Post";
   const toastMessage = initialData
-    ? "Update Category Successfully"
-    : "Create Category Successfully";
+    ? "Update Post Successfully"
+    : "Create Post Successfully";
   const action = initialData ? "Save Changes" : "Create";
   const [loading, setLoading] = useState(false);
   // Convert slug
@@ -77,36 +93,102 @@ const PostForm: React.FC<PostFormProps> = ({ initialData }) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const slug = slugify(values.title);
+    setLoading(true);
     try {
-      const response = await fetch("/api/user/posts", {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: values.title,
-          short_Desc: values.short_Desc,
-          content: values.content,
-          image: values.image,
-          slug,
-        }),
+      if (initialData) {
+        const response = await fetch(`/api/user/posts/${params.postId}`, {
+          method: "PATCH", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: values.title,
+            short_Desc: values.short_Desc,
+            content: values.content,
+            image: values.image,
+            slug,
+          }),
+        });
+
+        const result = await response.json();
+        if (result.msg === "success") {
+          toast.success(toastMessage);
+          router.push("/write");
+        }
+      } else {
+        const response = await fetch("/api/user/posts", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: values.title,
+            short_Desc: values.short_Desc,
+            content: values.content,
+            image: values.image,
+            slug,
+          }),
+        });
+
+        const result = await response.json();
+        if (result.msg === "success") {
+          toast.success(toastMessage);
+          router.push("/write");
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Delete Post
+
+  const onDelete = async () => {
+    try {
+      const response = await fetch(`/api/user/posts/${params.postId}`, {
+        method: "DELETE", // or 'PUT'
       });
 
       const result = await response.json();
-      console.log("Success:", result);
+      if (result.msg === "success") {
+        toast.success("Post Delete Successfully");
+        router.push("/write");
+      }
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  if (!isMounted) {
+    return null;
   }
   return (
     <div className="max-w-6xl p-4 mx-auto">
       <div className="flex justify-between items-center">
         <h2 className="md:text-xl font-bold">{title}</h2>
 
-        <Button variant={"destructive"}>
-          <Delete className="mr-2 h-4 w-4" />
-          Delete
-        </Button>
+        {initialData && (
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button variant={"destructive"}>
+                <Delete className="mr-2 h-4 w-4" />
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>Delete the post</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={onDelete}>Delete</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
       </div>
       <Separator className={cn("my-4")} />
       <Form {...form}>
@@ -118,7 +200,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialData }) => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="Post title" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -131,7 +213,7 @@ const PostForm: React.FC<PostFormProps> = ({ initialData }) => {
               <FormItem>
                 <FormLabel>Short Desc</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="Short Desc" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -168,7 +250,9 @@ const PostForm: React.FC<PostFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
-          <Button type="submit">{action}</Button>
+          <Button disabled={loading} type="submit">
+            {action}
+          </Button>
         </form>
       </Form>
     </div>
