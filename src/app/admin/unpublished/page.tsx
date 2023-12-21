@@ -1,3 +1,5 @@
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,7 +11,7 @@ interface UnPublishedPageParams {
 
 async function getUnpublishedPost() {
   try {
-    const res = await fetch(`/api/admin/unpublished`, {
+    const res = await fetch(`${process.env.BASE_URL}/admin/unpublished`, {
       cache: "no-store",
     });
     if (!res.ok) {
@@ -26,7 +28,10 @@ const UnPublishedPage = async () => {
   console.log(data);
   return (
     <div>
-      <div>Unverified Posts ({data?.posts?.length})</div>
+      <h2 className="md:text-xl font-bold pt-5">
+        Unverified Posts ({data?.posts?.length})
+      </h2>
+      <Separator className={cn("my-5")} />
       <div className="grid md:grid-cols-2 gap-5">
         {data?.posts?.map((item: UnPublishedPageParams) => (
           <Link href={`/admin/unpublished/${item.id}`} key={item.id}>
