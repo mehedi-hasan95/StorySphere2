@@ -25,7 +25,7 @@ export default async function AdminLayout({
             <Link href="/admin/user">User</Link>
           </Button>
           <Button variant={"outline"} className={cn("w-full")} asChild>
-            <Link href="/admin/user">User</Link>
+            <Link href="/admin/unpublished">Unpublished Post</Link>
           </Button>
         </div>
         <div className="w-2/3">{children}</div>

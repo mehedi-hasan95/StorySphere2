@@ -6,7 +6,7 @@ const Hero = () => {
   return (
     <div className="bg-[#FFC017]">
       <div className="max-w-6xl px-4 mx-auto py-10 md:py-16 lg:py-20">
-        <h2 className="text-4xl md:text-6xl lg:text-8xl font-medium pt-20">
+        <h2 className="text-4xl md:text-6xl lg:text-8xl font-medium">
           Stay curious.
         </h2>
         <p className="max-w-md text-lg py-4 font-medium">
