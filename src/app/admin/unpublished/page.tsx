@@ -9,7 +9,7 @@ interface UnPublishedPageParams {
 
 async function getUnpublishedPost() {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/admin/unpublished`, {
+    const res = await fetch(`/api/admin/unpublished`, {
       cache: "no-store",
     });
     if (!res.ok) {
@@ -23,20 +23,24 @@ async function getUnpublishedPost() {
 }
 const UnPublishedPage = async () => {
   const data = await getUnpublishedPost();
+  console.log(data);
   return (
-    <div className="grid md:grid-cols-2 gap-5">
-      {data?.posts?.map((item: UnPublishedPageParams) => (
-        <Link href={`/admin/unpublished/${item.id}`} key={item.id}>
-          <Image
-            src={item.image}
-            alt=""
-            height={500}
-            width={500}
-            className=""
-          />
-          <h2 className="md:text-lg font-bold">{item.title}</h2>
-        </Link>
-      ))}
+    <div>
+      <div>Unverified Posts ({data?.posts?.length})</div>
+      <div className="grid md:grid-cols-2 gap-5">
+        {data?.posts?.map((item: UnPublishedPageParams) => (
+          <Link href={`/admin/unpublished/${item.id}`} key={item.id}>
+            <Image
+              src={item.image}
+              alt=""
+              height={500}
+              width={500}
+              className=""
+            />
+            <h2 className="md:text-lg font-bold">{item.title}</h2>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

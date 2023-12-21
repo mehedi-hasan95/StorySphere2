@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    // const currentUser = await getCurrentUser();
-    // if (currentUser?.role !== "admin") {
-    //   return NextResponse.json({ msg: "Unauthorize User", status: 401 });
-    // }
+    const currentUser = await getCurrentUser();
+    if (currentUser?.role !== "admin") {
+      return NextResponse.json({ msg: "Unauthorize User", status: 401 });
+    }
     const posts = await prismadb.posts.findMany({
       where: {
         verifide: {
