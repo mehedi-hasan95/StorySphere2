@@ -77,7 +77,9 @@ const Blog = async () => {
               href={`/${item.id}`}
               className="md:text-xl font-bold line-clamp-2 pt-3"
             >
-              {item.title}
+              <span className="bg-gradient-to-r from-purple-600 to-purple-700 bg-[length:0px_4px] hover:bg-[length:100%_4px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500">
+                {item.title}
+              </span>
             </Link>
             <p className="line-clamp-2 py-2">{item.short_Desc}</p>
             <div className="flex justify-between items-center">

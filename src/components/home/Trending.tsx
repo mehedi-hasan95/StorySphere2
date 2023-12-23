@@ -23,7 +23,9 @@ interface TrendingProps {
 
 async function getTrendingPost() {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/public/trending`);
+    const res = await fetch(`${process.env.BASE_URL}/public/trending`, {
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");
@@ -84,7 +86,9 @@ const Trending = async () => {
                     href={`/${item.id}`}
                     className="line-clamp-2 py-2 md:text-xl font-bold"
                   >
-                    {item.title}
+                    <span className="bg-gradient-to-r from-purple-600 to-purple-700 bg-[length:0px_4px] hover:bg-[length:100%_4px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500">
+                      {item.title}
+                    </span>
                   </Link>
                   <div className="flex gap-4 text-xs">
                     <p>{item.createdAt.slice(0, 10)}</p>

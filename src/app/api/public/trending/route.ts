@@ -6,10 +6,12 @@ export async function GET(req: NextRequest) {
     const posts = await prismadb.posts.findMany({
       where: {
         createdAt: {
-          equals: new Date(new Date().setDate(new Date().getDate() - 365)),
+          gte: new Date(new Date().setDate(new Date().getDate() - 365)),
+        },
+        verifide: {
+          equals: true,
         },
       },
-
       orderBy: {
         views: "desc",
       },

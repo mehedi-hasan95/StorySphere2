@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-// import useSWR from "swr";
 
 interface WishListButtonProps {
   data: {
@@ -18,7 +17,7 @@ const BookmarkButton: React.FC<WishListButtonProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const currentUser = useSession();
   const { data: isFevorite, mutate } = useSWR(
-    `/api/public/bookmark/${data.id}`
+    `${process.env.NEXT_API_URL}/public/bookmark/${data.id}`
   );
   const handleWishlist = async () => {
     if (!currentUser?.data?.user?.id) {

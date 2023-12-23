@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { ThumbsUp } from "lucide-react";
-// import useSWR from "swr";
 
 interface WishListButtonProps {
   data: {
@@ -18,7 +17,9 @@ interface WishListButtonProps {
 const LikeButton: React.FC<WishListButtonProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const currentUser = useSession();
-  const { data: isFevorite, mutate } = useSWR(`/api/public/like/${data.id}`);
+  const { data: isFevorite, mutate } = useSWR(
+    `${process.env.NEXT_API_URL}/public/like/${data.id}`
+  );
   const handleLike = async () => {
     if (!currentUser?.data?.user?.id) {
       toast.error("Please login first");

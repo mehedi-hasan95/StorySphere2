@@ -1,7 +1,9 @@
+"use client";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import useSWR from "swr";
 
 interface UnPublishedPageParams {
   id: string;
@@ -9,23 +11,11 @@ interface UnPublishedPageParams {
   title: string;
 }
 
-async function getUnpublishedPost() {
-  try {
-    const res = await fetch(`${process.env.BASE_URL}/admin/unpublished`, {
-      cache: "no-store",
-    });
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
-
-    return res.json();
-  } catch (error) {
-    return null;
-  }
-}
-const UnPublishedPage = async () => {
-  const data = await getUnpublishedPost();
-  console.log(data);
+const UnPublishedPage = () => {
+  const { data, isLoading } = useSWR(
+    `${process.env.NEXT_API_URL}/admin/unpublished`
+  );
+  if (isLoading) return <div>loading...</div>;
   return (
     <div>
       <h2 className="md:text-xl font-bold pt-5">

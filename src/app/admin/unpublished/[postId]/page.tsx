@@ -82,7 +82,9 @@ const UnpublishedPostId = ({ params }: { params: { postId: string } }) => {
     }
   };
 
-  const { data, isLoading } = useSWR(`/api/admin/unpublished/${params.postId}`);
+  const { data, isLoading } = useSWR(
+    `${process.env.NEXT_API_URL}/admin/unpublished/${params.postId}`
+  );
   if (isLoading) return <div>loading...</div>;
 
   // update setting

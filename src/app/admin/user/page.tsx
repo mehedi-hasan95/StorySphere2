@@ -20,7 +20,10 @@ interface userDataProps {
   createdAt: string;
 }
 const AllUser = () => {
-  const { data, isLoading } = useSWR("/api/admin/alluser");
+  const { data, isLoading } = useSWR(
+    `${process.env.NEXT_API_URL}/admin/alluser`
+  );
+  console.log(data);
   if (isLoading) return <div>loading...</div>;
   return (
     <Table>
