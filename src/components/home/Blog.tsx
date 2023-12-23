@@ -7,6 +7,7 @@ import {
 import { Bookmark } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import BookmarkButton from "../userAction/BookmarkButton";
 
 interface BlogProps {
   id: string;
@@ -83,7 +84,7 @@ const Blog = async () => {
               <div className="flex gap-1 items-center">
                 <p>{item.createdAt.slice(0, 10)}</p>
               </div>
-              <Bookmark size={20} />
+              <BookmarkButton data={item} />
             </div>
           </div>
           <div className="w-1/3">

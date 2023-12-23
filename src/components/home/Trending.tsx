@@ -6,8 +6,36 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-const Trending = () => {
+// types
+interface TrendingProps {
+  id: string;
+  title: string;
+  createdAt: string;
+  user: {
+    name: string;
+    email: string;
+    image: string;
+  };
+}
+
+async function getTrendingPost() {
+  try {
+    const res = await fetch(`${process.env.BASE_URL}/public/trending`);
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+const Trending = async () => {
+  const data = await getTrendingPost();
   return (
     <div>
       <div className="max-w-6xl p-4 mx-auto">
@@ -17,38 +45,53 @@ const Trending = () => {
             Trending on Medium
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mt-7">
-            <div className="flex gap-5">
-              <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-slate-200">
-                O1
-              </h2>
-              <div>
-                <div className="flex gap-3 items-center">
-                  <Image
-                    src=""
-                    alt=""
-                    height={500}
-                    width={500}
-                    className="w-6 h-6 rounded-full"
-                  />
-                  <HoverCard openDelay={100}>
-                    <HoverCardTrigger className="cursor-pointer">
-                      Hover
-                    </HoverCardTrigger>
-                    <HoverCardContent>
-                      The React Framework – created and maintained by @vercel.
-                    </HoverCardContent>
-                  </HoverCard>
-                </div>
-                <h3 className="line-clamp-2 py-2">
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Quasi, sit?
-                </h3>
-                <div className="flex gap-4 text-xs">
-                  <p>Dec 17</p>
-                  <p>10 min read</p>
+            {data?.posts?.map((item: TrendingProps, idx: number) => (
+              <div key={item.id} className="flex gap-5">
+                <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-slate-200 select-none">
+                  O{idx + 1}
+                </h2>
+                <div>
+                  <div className="flex gap-3 items-center">
+                    <Image
+                      src={item.user.image}
+                      alt=""
+                      height={500}
+                      width={500}
+                      className="w-6 h-6 rounded-full"
+                    />
+                    <HoverCard openDelay={100}>
+                      <HoverCardTrigger
+                        className={cn("cursor-pointer font-bold text-xs")}
+                      >
+                        {item.user.name}
+                      </HoverCardTrigger>
+                      <HoverCardContent>
+                        <div className="flex gap-2 items-center">
+                          <Image
+                            src={item.user.image}
+                            alt=""
+                            height={500}
+                            width={500}
+                            className="h-10 w-10 rounded-full"
+                          />
+                          {item.user.name}
+                        </div>
+                        {item.user.email}
+                      </HoverCardContent>
+                    </HoverCard>
+                  </div>
+                  <Link
+                    href={`/${item.id}`}
+                    className="line-clamp-2 py-2 md:text-xl font-bold"
+                  >
+                    {item.title}
+                  </Link>
+                  <div className="flex gap-4 text-xs">
+                    <p>{item.createdAt.slice(0, 10)}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}{" "}
           </div>
         </div>
       </div>
