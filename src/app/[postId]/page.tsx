@@ -76,13 +76,3 @@ const SinglePost = async ({ params }: { params: { postId: string } }) => {
 };
 
 export default SinglePost;
-
-export async function generateStaticParams() {
-  const posts = await fetch(`${process.env.BASE_URL}/public/allpost`).then(
-    (res) => res.json()
-  );
-
-  return posts?.posts?.map((post: any) => ({
-    id: post.id,
-  }));
-}
