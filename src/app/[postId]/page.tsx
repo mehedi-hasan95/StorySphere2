@@ -1,6 +1,8 @@
 import { Preview } from "@/components/custom/Preview";
 import UserMenu from "@/components/custom/UserMenu";
 import { Separator } from "@/components/ui/separator";
+import BookmarkButton from "@/components/userAction/BookmarkButton";
+import LikeButton from "@/components/userAction/LikeButton";
 import Image from "next/image";
 
 async function getSingleData(id: string) {
@@ -52,10 +54,10 @@ const SinglePost = async ({ params }: { params: { postId: string } }) => {
         <Separator />
         <div className="flex justify-between items-center py-5">
           <div className="flex gap-x-4">
-            <p>Like</p>
+            <LikeButton data={data?.post} />
             <p>Comment</p>
           </div>
-          <p>Bookmark</p>
+          <BookmarkButton data={data?.post} />
         </div>
         <Separator />
       </div>
