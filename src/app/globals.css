@@ -89,3 +89,7 @@ body,
 .menu.scrolled {
   background-color: #ffffff;
 }
+
+.ql-editor p {
+  font-size: 16px;
+}
