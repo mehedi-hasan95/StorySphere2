@@ -13,12 +13,13 @@ interface UnPublishedPageParams {
 
 const UnPublishedPage = () => {
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_API_URL}/admin/unpublished`
+    `https://story-sphere.vercel.app/api/admin/unpublished`
   );
   if (isLoading) return <div>loading...</div>;
   if (data?.status === 401) {
     <p>Unauthorize user</p>;
   }
+  console.log(data);
   return (
     <div>
       <h2 className="md:text-xl font-bold pt-5">

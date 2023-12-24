@@ -21,9 +21,10 @@ interface userDataProps {
 }
 const AllUser = () => {
   const { data, isLoading } = useSWR(
-    `${process.env.NEXT_API_URL}/admin/alluser`
+    `https://story-sphere.vercel.app/api/admin/alluser`
   );
   if (isLoading) return <div>loading...</div>;
+  console.log(data);
   return (
     <Table>
       <TableCaption>A list of your recent invoices.</TableCaption>
