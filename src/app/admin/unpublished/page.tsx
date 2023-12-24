@@ -16,6 +16,7 @@ const UnPublishedPage = () => {
     `${process.env.NEXT_API_URL}/admin/unpublished`
   );
   if (isLoading) return <div>loading...</div>;
+  console.log(data);
   return (
     <div>
       <h2 className="md:text-xl font-bold pt-5">
