@@ -1,9 +1,10 @@
-"use client";
+export const revalidate = 0;
+import getCurrentUser from "@/actions/getCurrentUser";
 import { Separator } from "@/components/ui/separator";
+import prismadb from "@/lib/prismadb";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import useSWR from "swr";
 
 interface UnPublishedPageParams {
   id: string;
@@ -11,23 +12,22 @@ interface UnPublishedPageParams {
   title: string;
 }
 
-export const fetchCache = "force-no-store";
-const UnPublishedPage = () => {
-  const { data, isLoading } = useSWR(
-    `${process.env.NEXT_API_URL}/admin/unpublished`
-  );
-  if (isLoading) return <div>loading...</div>;
-  if (data?.status === 401) {
-    <p>Unauthorize user</p>;
-  }
+const UnPublishedPage = async () => {
+  const currentUser = await getCurrentUser();
+  const data = await prismadb.posts.findMany({
+    where: {
+      verifide: false,
+      userId: currentUser?.id,
+    },
+  });
   return (
     <div>
       <h2 className="md:text-xl font-bold pt-5">
-        Unverified Posts ({data?.posts?.length})
+        Unverified Posts ({data?.length})
       </h2>
       <Separator className={cn("my-5")} />
       <div className="grid md:grid-cols-2 gap-5">
-        {data?.posts?.map((item: UnPublishedPageParams) => (
+        {data?.map((item: UnPublishedPageParams) => (
           <Link href={`/admin/unpublished/${item.id}`} key={item.id}>
             <Image
               src={item.image}
