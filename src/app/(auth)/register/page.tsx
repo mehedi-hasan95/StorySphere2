@@ -26,18 +26,18 @@ import toast from "react-hot-toast";
 const formSchema = z
   .object({
     name: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Name must be at least 2 characters.",
     }),
     email: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Email must be at least 2 characters.",
     }),
 
     image: z.string().min(0),
     password: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Password must be at least 2 characters.",
     }),
     confirm: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Passwrod must be at least 2 characters.",
     }),
   })
   .refine((data) => data.password === data.confirm, {

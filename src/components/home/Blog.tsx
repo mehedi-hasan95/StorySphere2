@@ -20,10 +20,17 @@ interface BlogProps {
     email: string;
     image: string;
   };
+  _count: {
+    postComment: number;
+    postLike: number;
+    wishlist: number;
+  };
 }
 async function getAllData() {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/public/allpost`);
+    const res = await fetch(`${process.env.BASE_URL}/public/allpost`, {
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");

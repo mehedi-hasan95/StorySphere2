@@ -8,13 +8,16 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { ThumbsUp } from "lucide-react";
 
-interface WishListButtonProps {
+interface LikeButtonProps {
   data: {
     id: string;
+    _count: {
+      postLike: number;
+    };
   };
 }
 
-const LikeButton: React.FC<WishListButtonProps> = ({ data }) => {
+const LikeButton: React.FC<LikeButtonProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const currentUser = useSession();
   const { data: isFevorite, mutate } = useSWR(
@@ -76,11 +79,12 @@ const LikeButton: React.FC<WishListButtonProps> = ({ data }) => {
             `${
               isFevorite?.like?.id &&
               isFevorite?.like?.userId === currentUser?.data?.user?.id
-                ? "text-red-500 fill-red-500"
+                ? "text-blue-500 fill-blue-500"
                 : ""
             } mr-2 disabled:cursor-none`
           )}
         />
+        {data?._count?.postLike}
       </Button>
     </div>
   );

@@ -20,6 +20,13 @@ export async function GET(
             image: true,
           },
         },
+        _count: {
+          select: {
+            postComment: true,
+            postLike: true,
+            wishlist: true,
+          },
+        },
       },
     });
     return NextResponse.json({ msg: "success", post });

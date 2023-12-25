@@ -10,6 +10,9 @@ import { useState } from "react";
 interface WishListButtonProps {
   data: {
     id: string;
+    _count: {
+      wishlist: number;
+    };
   };
 }
 
@@ -73,11 +76,12 @@ const BookmarkButton: React.FC<WishListButtonProps> = ({ data }) => {
             `${
               isFevorite?.bookmark?.id &&
               isFevorite?.bookmark?.userId === currentUser?.data?.user?.id
-                ? "text-red-500 fill-red-500"
+                ? "text-blue-500 fill-blue-500"
                 : ""
             } mr-2 disabled:cursor-none`
           )}
         />
+        {data?._count?.wishlist}
       </Button>
     </div>
   );
